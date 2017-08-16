@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 # from PIL import Image
 # print(numpy.arange(1,10))
 
-img = cv2.imread('e:/test1.png', 0)
+img = cv2.imread('e:/table.jpg')
 # cv2.namedWindow("Image")
 # cv2.imshow('Image', image)
 # k = cv2.waitKey(0)
@@ -115,19 +115,23 @@ img = cv2.imread('e:/test1.png', 0)
 
 # 透视变换
 # rows, cols, ch = img.shape
-# pts1 = np.float32([[56, 65], [368, 52], [28, 387], [389, 390]])
-# pts2 = np.float32([[0, 0], [300, 0], [0, 300], [300, 300]])
+# pts1 = np.float32([[395, 951], [3142, 840], [425, 4183], [3168, 4255]])
+# pts2 = np.float32([[0, 0], [3312, 0], [0, 4416], [3312, 4416]])
 # M = cv2.getPerspectiveTransform(pts1, pts2)
-# dst = cv2.warpPerspective(img, M, (300, 300))
-# plt.subplot(121)
-# plt.title('Input')
-# plt.imshow(img)
-# plt.subplot(122)
-# plt.imshow(dst)
-# plt.title('Output')
-# # plt.subplot(121, plt.imshow(img), plt.title('Input'))
-# # plt.subplot(121, plt.imshow(dst), plt.title('Output'))
-# plt.show()
+# dst = cv2.warpPerspective(img, M, (3312, 4416))
+# # cv2.imshow('res', img)
+# # cv2.waitKeyEx(0)
+# # cv2.destroyAllWindows()
+# # plt.subplot(121)
+# # plt.title('Input')
+# # plt.imshow(img)
+# # plt.subplot(122)
+# # plt.imshow(dst)
+# # plt.title('Output')
+# # # plt.subplot(121, plt.imshow(img), plt.title('Input'))
+# # # plt.subplot(121, plt.imshow(dst), plt.title('Output'))
+# # plt.show()
+# cv2.imwrite('e:/demo/demo.jpg', dst)
 
 # 阈值化
 # ret, thresh1 = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
@@ -144,7 +148,7 @@ img = cv2.imread('e:/test1.png', 0)
 # plt.show()
 
 # 自适应阈值
-# img = cv2.medianBlur(img, 5)
+# img = cv2.medianBlur(img, 1)
 # ret, th1 = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
 # th2 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
 # th3 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
@@ -185,10 +189,10 @@ img = cv2.imread('e:/test1.png', 0)
 
 # 平均滤波
 # blur = cv2.blur(img, (5, 5))
-# 0 是指根据窗口大小（ 5,5 ）来计算高斯函数标准差
-# blur = cv2.GaussianBlur(img, (5, 5), 0)
-# blur = cv2.medianBlur(img, 5)
-# blur = cv2.bilateralFilter(img, 9, 75, 75)
+# # 0 是指根据窗口大小（ 5,5 ）来计算高斯函数标准差
+# # blur = cv2.GaussianBlur(img, (5, 5), 0)
+# # blur = cv2.medianBlur(img, 5)
+# # blur = cv2.bilateralFilter(img, 9, 75, 75)
 # plt.subplot(121), plt.imshow(img), plt.title('Original')
 # plt.xticks([]), plt.yticks([])
 # plt.subplot(122), plt.imshow(blur), plt.title('Blurred')
@@ -196,17 +200,17 @@ img = cv2.imread('e:/test1.png', 0)
 # plt.show()
 
 # 腐蚀 膨胀 开运算 闭运算
-# kernel = np.ones((5, 5), np.uint8)
+# kernel = np.ones((3, 3), np.uint8)
 # # erosion = cv2.erode(img, kernel, iterations=1)
 # # dilation = cv2.dilate(img,kernel,iterations = 1)
-# # opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+# opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
 # # closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 # # gradient = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel)
 # # tophat = cv2.morphologyEx(img, cv2.MORPH_TOPHAT, kernel)
-# blackhat = cv2.morphologyEx(img, cv2.MORPH_BLACKHAT, kernel)
+# # blackhat = cv2.morphologyEx(img, cv2.MORPH_BLACKHAT, kernel)
 # plt.subplot(121), plt.imshow(img), plt.title('Original')
 # plt.xticks([]), plt.yticks([])
-# plt.subplot(122), plt.imshow(blackhat), plt.title('Blurred')
+# plt.subplot(122), plt.imshow(opening), plt.title('Blurred')
 # plt.xticks([]), plt.yticks([])
 # plt.show()
 
@@ -260,10 +264,30 @@ img = cv2.imread('e:/test1.png', 0)
 # print(hierarchy)
 
 # 直方图均衡化
-equ = cv2.equalizeHist(img)
-res = np.hstack((img, equ))
-# stacking images side-by-side
-# cv2.imwrite('res.png',res)
-cv2.imshow('res', res)
-cv2.waitKeyEx(0)
-cv2.destroyAllWindows()
+# equ = cv2.equalizeHist(img)
+# res = np.hstack((img, equ))
+# # stacking images side-by-side
+# # cv2.imwrite('res.png',res)
+# cv2.imshow('res', res)
+# cv2.waitKeyEx(0)
+# cv2.destroyAllWindows()
+
+# 霍夫直线
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+lines = cv2.HoughLines(edges, 1, np.pi / 180, 500)
+for line in lines:
+    for rho, theta in line:
+        print(rho, theta)
+        a = np.cos(theta)
+        b = np.sin(theta)
+        x0 = a * rho
+        y0 = b * rho
+        x1 = int(x0 + 1000 * (-b))
+        y1 = int(y0 + 1000 * (a))
+        x2 = int(x0 - 3000 * (-b))
+        y2 = int(y0 - 3000 * (a))
+        cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+
+cv2.imwrite('e:/demo/houghline.jpg', img)
+# cv2.imwrite('e:/demo/edges1.jpg',edges)

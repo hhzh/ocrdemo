@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 # from PIL import Image
 # print(numpy.arange(1,10))
 
-img = cv2.imread('e:/table.jpg')
+img = cv2.imread('e:/2.jpg')
 # cv2.namedWindow("Image")
 # cv2.imshow('Image', image)
 # k = cv2.waitKey(0)
@@ -154,12 +154,13 @@ img = cv2.imread('e:/table.jpg')
 # th3 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
 # titles = ['Original Image', 'Global Thresholding (v=127)', 'Adaptive Mean Thresholding',
 #           'Adaptive Gaussian Thresholding']
-# images = [img, th1, th2, th3]
-# for i in np.arange(0, 4):
-#     plt.subplot(2, 2, i + 1), plt.imshow(images[i], 'gray')
-#     plt.title(titles[i])
-#     plt.xticks([]), plt.yticks([])
-# plt.show()
+# # images = [img, th1, th2, th3]
+# # for i in np.arange(0, 4):
+# #     plt.subplot(2, 2, i + 1), plt.imshow(images[i], 'gray')
+# #     plt.title(titles[i])
+# #     plt.xticks([]), plt.yticks([])
+# # plt.show()
+# cv2.imwrite('e:/demo/thresh.jpg',th3)
 
 # OTSU 二值化
 # ret1, th1 = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
@@ -200,18 +201,21 @@ img = cv2.imread('e:/table.jpg')
 # plt.show()
 
 # 腐蚀 膨胀 开运算 闭运算
+# # img = cv2.GaussianBlur(img, (3, 3), 0)
+# # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+# # edges = cv2.Canny(gray, 50, 150, apertureSize=3)
 # kernel = np.ones((3, 3), np.uint8)
 # # erosion = cv2.erode(img, kernel, iterations=1)
 # # dilation = cv2.dilate(img,kernel,iterations = 1)
-# opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+# # opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
 # # closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 # # gradient = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel)
 # # tophat = cv2.morphologyEx(img, cv2.MORPH_TOPHAT, kernel)
 # # blackhat = cv2.morphologyEx(img, cv2.MORPH_BLACKHAT, kernel)
 # plt.subplot(121), plt.imshow(img), plt.title('Original')
 # plt.xticks([]), plt.yticks([])
-# plt.subplot(122), plt.imshow(opening), plt.title('Blurred')
-# plt.xticks([]), plt.yticks([])
+# # plt.subplot(122), plt.imshow(opening), plt.title('Blurred')
+# # plt.xticks([]), plt.yticks([])
 # plt.show()
 
 # 图像梯度
@@ -273,21 +277,78 @@ img = cv2.imread('e:/table.jpg')
 # cv2.destroyAllWindows()
 
 # 霍夫直线
+# img = cv2.GaussianBlur(img, (3, 3), 0)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-edges = cv2.Canny(gray, 50, 150, apertureSize=3)
-lines = cv2.HoughLines(edges, 1, np.pi / 180, 500)
-for line in lines:
-    for rho, theta in line:
-        print(rho, theta)
-        a = np.cos(theta)
-        b = np.sin(theta)
-        x0 = a * rho
-        y0 = b * rho
-        x1 = int(x0 + 1000 * (-b))
-        y1 = int(y0 + 1000 * (a))
-        x2 = int(x0 - 3000 * (-b))
-        y2 = int(y0 - 3000 * (a))
-        cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+edges = cv2.Canny(gray, 400, 500, apertureSize=3)
+# lines = cv2.HoughLines(edges, 1, np.pi / 180, 425)
+# for line in lines:
+#     for rho, theta in line:
+#         print(rho, theta)
+#         a = np.cos(theta)
+#         b = np.sin(theta)
+#         x0 = a * rho
+#         y0 = b * rho
+#         x1 = int(x0 + 1000 * (-b))
+#         y1 = int(y0 + 1000 * (a))
+#         x2 = int(x0 - 3000 * (-b))
+#         y2 = int(y0 - 3000 * (a))
+#         cv2.line(img, (x1, y1), (x2, y2), (255, 255, 255), 2)
 
-cv2.imwrite('e:/demo/houghline.jpg', img)
-# cv2.imwrite('e:/demo/edges1.jpg',edges)
+# blur and threshold the image
+blurred = cv2.blur(edges, (7, 7))
+(_, thresh) = cv2.threshold(blurred, 70, 255, cv2.THRESH_BINARY)
+
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (100, 100))
+closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+
+# perform a series of erosions and dilations
+closed = cv2.erode(closed, None, iterations=4)
+closed = cv2.dilate(closed, None, iterations=4)
+
+image, contours, hierarchy = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+c = sorted(contours, key=cv2.contourArea, reverse=True)
+
+for cc in c:
+    # compute the rotated bounding box of the largest contour
+    rect = cv2.minAreaRect(cc)
+    box = np.int0(cv2.boxPoints(rect))
+
+    # draw a bounding box arounded the detected barcode and display the image
+    cv2.drawContours(img, [box], -1, (0, 255, 0), 3)
+
+
+# cv2.imshow("Image", img)
+# cv2.imwrite("contoursImage2.jpg", img)
+# cv2.waitKey(0)
+
+cv2.imwrite('e:/demo/img.jpg', img)
+cv2.imwrite('e:/demo/image.jpg', image)
+print(type(hierarchy))
+print(hierarchy)
+# cv2.imwrite('e:/demo/edges.jpg', edges)
+# print(type(lines))
+# print(lines)
+
+# 霍夫直线（改进版）
+# for i in np.arange(5):
+#     gray = cv2.GaussianBlur(img, (3, 3), 0)
+#     edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+#     lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 500, 800)
+#     # lines = cv2.HoughLines(edges, 1, np.pi / 180, 600)
+#     # for line in lines:
+#     #     for rho, theta in line:
+#     #         print(rho, theta)
+#     #         a = np.cos(theta)
+#     #         b = np.sin(theta)
+#     #         x0 = a * rho
+#     #         y0 = b * rho
+#     #         x1 = int(x0 + 1000 * (-b))
+#     #         y1 = int(y0 + 1000 * (a))
+#     #         x2 = int(x0 - 3000 * (-b))
+#     #         y2 = int(y0 - 3000 * (a))
+#     #         cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+#     for line in lines:
+#         for x1, y1, x2, y2 in line:
+#             cv2.line(img, (x1, y1), (x2, y2), (255, 255, 255), 2)
+#             cv2.imwrite('e:/demo/houghline.jpg', img)
+# cv2.imwrite('e:/demo/edges.jpg', edges)

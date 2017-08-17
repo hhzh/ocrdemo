@@ -16,7 +16,7 @@ def get_file_content(filepath):
 aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
 # 调用通用文字识别接口
-result = aipOcr.basicGeneral(get_file_content('e:/copy1.jpg'))
+result = aipOcr.basicGeneral(get_file_content('e:/1.jpg'))
 
 # 如果图片是url 调用示例如下
 # result = aipOcr.basicGeneral('http://img0.ph.126.net/JgZPujjerZ1A7U_6gfs8Ag==/2515260391903843500.jpg')
@@ -26,4 +26,4 @@ result = aipOcr.basicGeneral(get_file_content('e:/copy1.jpg'))
 # print(result)
 # print(result['words_result'])
 for obj in result['words_result']:
-    print(obj)
+    print(obj['words'])

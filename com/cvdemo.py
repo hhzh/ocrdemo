@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 # from PIL import Image
 # print(numpy.arange(1,10))
 
-img = cv2.imread('e:/2.jpg')
+img = cv2.imread('e:/5.jpg')
 # cv2.namedWindow("Image")
 # cv2.imshow('Image', image)
 # k = cv2.waitKey(0)
@@ -279,7 +279,7 @@ img = cv2.imread('e:/2.jpg')
 # 霍夫直线
 # img = cv2.GaussianBlur(img, (3, 3), 0)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-edges = cv2.Canny(gray, 400, 500, apertureSize=3)
+edges = cv2.Canny(gray, 100, 300, apertureSize=3)
 # lines = cv2.HoughLines(edges, 1, np.pi / 180, 425)
 # for line in lines:
 #     for rho, theta in line:
@@ -295,7 +295,7 @@ edges = cv2.Canny(gray, 400, 500, apertureSize=3)
 #         cv2.line(img, (x1, y1), (x2, y2), (255, 255, 255), 2)
 
 # blur and threshold the image
-blurred = cv2.blur(edges, (7, 7))
+blurred = cv2.blur(edges, (3, 3))
 (_, thresh) = cv2.threshold(blurred, 70, 255, cv2.THRESH_BINARY)
 
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (100, 100))
@@ -308,23 +308,58 @@ closed = cv2.dilate(closed, None, iterations=4)
 image, contours, hierarchy = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 c = sorted(contours, key=cv2.contourArea, reverse=True)
 
+cv2.imwrite('e:/55/gray.jpg',  gray)
+cv2.imwrite('e:/55/edges.jpg',  edges)
+cv2.imwrite('e:/55/blurred.jpg',  blurred)
+cv2.imwrite('e:/55/thresh.jpg',  thresh)
+cv2.imwrite('e:/55/closed.jpg',  closed)
+
+mm = 1
 for cc in c:
     # compute the rotated bounding box of the largest contour
     rect = cv2.minAreaRect(cc)
     box = np.int0(cv2.boxPoints(rect))
 
+    Xs = [i[0] for i in box]
+    Ys = [i[1] for i in box]
+    x1 = min(Xs)-15
+    x2 = max(Xs)+15
+    y1 = min(Ys)-15
+    y2 = max(Ys)+15
+    height = y2 - y1
+    width = x2 - x1
+    cropImg = img[y1:y1 + height, x1:x1 + width]
     # draw a bounding box arounded the detected barcode and display the image
     cv2.drawContours(img, [box], -1, (0, 255, 0), 3)
 
+    cv2.imwrite('e:/55/cropImg' + str(mm) + '.jpg', cropImg)
+    mm = mm + 1
+cv2.imwrite('e:/55/box.jpg',  img)
 
-# cv2.imshow("Image", img)
-# cv2.imwrite("contoursImage2.jpg", img)
-# cv2.waitKey(0)
+# rect = cv2.minAreaRect(c[0])
+# box = np.int0(cv2.boxPoints(rect))
+#
+# Xs = [i[0] for i in box]
+# Ys = [i[1] for i in box]
+# x1 = min(Xs)-15
+# x2 = max(Xs)+15
+# y1 = min(Ys)-15
+# y2 = max(Ys)+15
+# hight = y2 - y1
+# width = x2 - x1
+# cropImg = img[y1:y1 + hight, x1:x1 + width]
+# print(type(cropImg))
+# print(cropImg)
 
-cv2.imwrite('e:/demo/img.jpg', img)
-cv2.imwrite('e:/demo/image.jpg', image)
-print(type(hierarchy))
-print(hierarchy)
+    # draw a bounding box arounded the detected barcode and display the image
+    # cv2.drawContours(img, [box], -1, (0, 255, 0), 3)
+
+# cv2.imwrite('e:/demo/img.jpg', img)
+# cv2.imwrite('e:/demo/image.jpg', image)
+# print(type(hierarchy))
+# print(hierarchy)
+
+
 # cv2.imwrite('e:/demo/edges.jpg', edges)
 # print(type(lines))
 # print(lines)

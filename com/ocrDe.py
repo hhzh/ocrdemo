@@ -17,9 +17,9 @@ def get_file_content(filepath):
 aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
 # 调用通用文字识别接口
-f = open('e:/55/result.txt', 'a')
-for i in np.arange(1, 40):
-    result = aipOcr.basicGeneral(get_file_content('e:/55/cropImg' + str(i) + '.jpg'))
+f = open('e:/66/result.txt', 'a')
+for i in np.arange(1, 10):
+    result = aipOcr.basicGeneral(get_file_content('e:/66/cropImg' + str(i) + '.jpg'))
     if result['words_result_num'] > 0:
         for obj in result['words_result']:
             print(obj['words'])

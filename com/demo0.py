@@ -3,7 +3,6 @@ import cv2
 import ctypes
 import numpy as np
 
-
 # filepath = 'E:/bak/dd.txt'
 # filepath = filepath.replace('E:', 'D:')
 # # print(filepath)
@@ -39,15 +38,27 @@ import numpy as np
 # print(img.shape)
 # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-def traverseRem(filepath):
-    files = os.listdir(filepath)
-    for fi in files:
-        fi_d = os.path.join(filepath, fi)
-        if os.path.isdir(fi_d):
-            traverseRem(fi_d)
-        elif fi_d.endswith('errorOcr.log'):
-            print('remove:' + fi_d)
-            os.remove(fi_d)
+# def traverseRem(filepath):
+#     files = os.listdir(filepath)
+#     for fi in files:
+#         fi_d = os.path.join(filepath, fi)
+#         if os.path.isdir(fi_d):
+#             traverseRem(fi_d)
+#         elif fi_d.endswith('errorOcr.log'):
+#             print('remove:' + fi_d)
+#             os.remove(fi_d)
+#
+#
+# traverseRem('d:/6yue3haoyufangtang')
 
+aa = np.arange(53)
+x = 0
+bb = []
+while x < 53:
+    bb.append(aa[x:x + 10])
+    x = x + 10
 
-traverseRem('d:/6yue3haoyufangtang')
+print(bb)
+for cc in bb:
+    print(cc)
+# print(aa[50:60])

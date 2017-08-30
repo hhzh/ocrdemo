@@ -8,10 +8,15 @@ import threading
 # API_KEY = 'eqDDM65ekpMTxGGXlM658Tvd'
 # SECRET_KEY = 'BzUyA3S0IoqAmTBd0jGtZ0ghiIzB7dLi'
 
-# qiaojian
-APP_ID = '9985116'
-API_KEY = 'wsOs6Ye6iEKqkH1czgBFWhWS'
-SECRET_KEY = 'H56jOxlyZmueLUHnsx7uZnGqXmhVHoZG'
+# # qiaojian
+# APP_ID = '9985116'
+# API_KEY = 'wsOs6Ye6iEKqkH1czgBFWhWS'
+# SECRET_KEY = 'H56jOxlyZmueLUHnsx7uZnGqXmhVHoZG'
+
+# vip
+APP_ID = '10073324'
+API_KEY = 'zapROApDpKIY2xGF4LXwUTj4'
+SECRET_KEY = 'Zx3S7lMIqaU3nl4b7X59A1FXGCQYdS8G'
 
 paths = []
 
@@ -30,13 +35,6 @@ def traverse(filepath):
             traverse(fi_d)
         elif fi_d.endswith('img.jpg'):
             paths.append(os.path.join(filepath, fi_d))
-
-
-# 初始化ApiOcr对象
-aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
-
-# 调用通用文字识别接口
-traverse('d:/6yue3haoyufangtang')
 
 
 def begin_ocr(imgpaths):
@@ -67,5 +65,25 @@ def begin_ocr(imgpaths):
 
 
 def create_thread(imgpaths):
-    subpaths = len(imgpaths) / 20
-    th = threading.Thread(target=begin_ocr, args=(imgpaths,))
+    x = 0
+    splitpaths = []
+    splitsize = int(len(imgpaths) / 10)
+    while x < len(imgpaths):
+        splitpaths.append(imgpaths[x:x + splitsize])
+        x = x + splitsize
+    ths = []
+    for splitpath in splitpaths:
+        th = threading.Thread(target=begin_ocr, args=(splitpath,))
+        ths.append(th)
+    for i in ths:
+        i.start()
+    for i in ths:
+        i.join()
+
+
+if __name__ == "__main__":
+    # 初始化ApiOcr对象
+    aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
+
+    traverse('d:/6yue3haoyufangtang')
+    create_thread(paths)

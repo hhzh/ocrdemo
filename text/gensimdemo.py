@@ -1,4 +1,5 @@
 from gensim.models import word2vec
+from gensim.models import Word2Vec
 import gensim
 from gensim.models.word2vec import LineSentence
 import jieba
@@ -42,7 +43,26 @@ import multiprocessing
 
 # model = Word2Vec(LineSentence('d:/result.txt'), size=400, window=5, min_count=5, workers=multiprocessing.cpu_count())
 
-sentences = word2vec.Text8Corpus(u'd:/result.txt')
-model = word2vec.Word2Vec(sentences, size=200)
+# sentences = word2vec.Text8Corpus(u'd:/result.txt')
+# model = word2vec.Word2Vec(sentences, size=200)
+#
+# print(model.similarity('him', 'I'))
 
-print(model.similarity('him', 'I'))
+# text_list = []
+# with open('d:/dd.txt', 'r',encoding='utf8') as fread:
+#     for line in fread.readlines():
+#         # if line_num> 100:
+#         #     break
+#         seg_list = jieba.cut(str(line), cut_all=False)
+#         word_list = [item for item in seg_list if len(item) > 1]
+#         text_list.append(word_list)
+#
+# w2v_model = Word2Vec(text_list)
+# w2v_model.save('d:/bb.model')
+
+# text_list = segment_novel('./data/gulong.txt','gulong_dict2.txt')
+out_model_file = 'd:/bb.model'
+# train_word2vec(text_list,out_model_file)
+model = Word2Vec.load(out_model_file)
+for e in model.most_similar(positive=[u'慕容复'], topn=30):
+    print(e[0], e[1])

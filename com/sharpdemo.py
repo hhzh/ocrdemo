@@ -2,11 +2,12 @@ import cv2
 import numpy as np
 
 imgs = []
-for i in np.arange(1, 15):
-    img = cv2.imread('e:/test/demo/' + str(i) + '.jpg')
+for i in np.arange(1, 7):
+    img = cv2.imread('e:/test/demo3/' + str(i) + '.JPG')
     imgs.append(img)
 
 for img in imgs:
+    img = cv2.imread('e:/test/demo3/' + str(i) + '.JPG')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     fm = cv2.Laplacian(gray, cv2.CV_64F).var()
     print(fm)

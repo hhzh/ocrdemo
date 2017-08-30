@@ -2,6 +2,8 @@ import os
 import cv2
 import ctypes
 import numpy as np
+import threading
+from time import ctime,sleep
 
 # filepath = 'E:/bak/dd.txt'
 # filepath = filepath.replace('E:', 'D:')
@@ -38,27 +40,56 @@ import numpy as np
 # print(img.shape)
 # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-# def traverseRem(filepath):
-#     files = os.listdir(filepath)
-#     for fi in files:
-#         fi_d = os.path.join(filepath, fi)
-#         if os.path.isdir(fi_d):
-#             traverseRem(fi_d)
-#         elif fi_d.endswith('errorOcr.log'):
-#             print('remove:' + fi_d)
-#             os.remove(fi_d)
+def traverseRem(filepath):
+    files = os.listdir(filepath)
+    for fi in files:
+        fi_d = os.path.join(filepath, fi)
+        if os.path.isdir(fi_d):
+            traverseRem(fi_d)
+        elif fi_d.endswith('errorOcr.log') or fi_d.endswith('result.txt') or fi_d.endswith('nohup.log'):
+            print('remove:' + fi_d)
+            os.remove(fi_d)
+
+
+traverseRem('d:/6yue3haoyufangtang/19_zhoumengjie_shenmu')
+
+# def begin_ocr(imgpaths):
+#     print('线程开始：')
+#     for imgpath in imgpaths:
+#         sleep(1)
+#         print(imgpath)
 #
 #
-# traverseRem('d:/6yue3haoyufangtang')
+# def create_thread(imgpaths):
+#     x = 0
+#     splitpaths = []
+#     splitsize = int(len(imgpaths) / 10)
+#     while x < len(imgpaths):
+#         splitpaths.append(imgpaths[x:x + splitsize])
+#         x = x + splitsize
+#     ths = []
+#     for splitpath in splitpaths:
+#         th = threading.Thread(target=begin_ocr, args=(splitpath,))
+#         ths.append(th)
+#     for i in ths:
+#         i.start()
+#     for i in ths:
+#         i.join()
+#
+#
+# if __name__ == '__main__':
+#     aa = np.arange(1, 106)
+#     create_thread(aa)
 
-aa = np.arange(53)
-x = 0
-bb = []
-while x < 53:
-    bb.append(aa[x:x + 10])
-    x = x + 10
-
-print(bb)
-for cc in bb:
-    print(cc)
-# print(aa[50:60])
+    # aa = np.arange(53)
+    # x = 0
+    # bb = []
+    # xsize=int(int(53/5))
+    # while x < 53:
+    #     bb.append(aa[x:x + xsize])
+    #     x = x + xsize
+    #
+    # print(bb)
+    # for cc in bb:
+    #     print(cc)
+    # print(aa[50:60])

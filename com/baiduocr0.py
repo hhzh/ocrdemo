@@ -8,9 +8,14 @@ import os
 # SECRET_KEY = 'BzUyA3S0IoqAmTBd0jGtZ0ghiIzB7dLi'
 
 # qiaojian
-APP_ID = '9985116'
-API_KEY = 'wsOs6Ye6iEKqkH1czgBFWhWS'
-SECRET_KEY = 'H56jOxlyZmueLUHnsx7uZnGqXmhVHoZG'
+# APP_ID = '9985116'
+# API_KEY = 'wsOs6Ye6iEKqkH1czgBFWhWS'
+# SECRET_KEY = 'H56jOxlyZmueLUHnsx7uZnGqXmhVHoZG'
+
+# vip
+APP_ID = '10073324'
+API_KEY = 'zapROApDpKIY2xGF4LXwUTj4'
+SECRET_KEY = 'Zx3S7lMIqaU3nl4b7X59A1FXGCQYdS8G'
 
 paths = []
 

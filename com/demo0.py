@@ -3,7 +3,7 @@ import cv2
 import ctypes
 import numpy as np
 import threading
-from time import ctime,sleep
+from time import ctime, sleep
 
 # filepath = 'E:/bak/dd.txt'
 # filepath = filepath.replace('E:', 'D:')
@@ -40,18 +40,19 @@ from time import ctime,sleep
 # print(img.shape)
 # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-def traverseRem(filepath):
-    files = os.listdir(filepath)
-    for fi in files:
-        fi_d = os.path.join(filepath, fi)
-        if os.path.isdir(fi_d):
-            traverseRem(fi_d)
-        elif fi_d.endswith('errorOcr.log') or fi_d.endswith('result.txt') or fi_d.endswith('nohup.log'):
-            print('remove:' + fi_d)
-            os.remove(fi_d)
-
-
-traverseRem('d:/demo')
+# 删除文件
+# def traverseRem(filepath):
+#     files = os.listdir(filepath)
+#     for fi in files:
+#         fi_d = os.path.join(filepath, fi)
+#         if os.path.isdir(fi_d):
+#             traverseRem(fi_d)
+#         elif fi_d.endswith('errorOcr.log') or fi_d.endswith('result.txt') or fi_d.endswith('nohup.log'):
+#             print('remove:' + fi_d)
+#             os.remove(fi_d)
+#
+#
+# traverseRem('d:/demo')
 
 # def begin_ocr(imgpaths):
 #     print('线程开始：')
@@ -81,15 +82,25 @@ traverseRem('d:/demo')
 #     aa = np.arange(1, 106)
 #     create_thread(aa)
 
-    # aa = np.arange(53)
-    # x = 0
-    # bb = []
-    # xsize=int(int(53/5))
-    # while x < 53:
-    #     bb.append(aa[x:x + xsize])
-    #     x = x + xsize
-    #
-    # print(bb)
-    # for cc in bb:
-    #     print(cc)
-    # print(aa[50:60])
+# aa = np.arange(53)
+# x = 0
+# bb = []
+# xsize=int(int(53/5))
+# while x < 53:
+#     bb.append(aa[x:x + xsize])
+#     x = x + xsize
+#
+# print(bb)
+# for cc in bb:
+#     print(cc)
+# print(aa[50:60])
+
+with open('d:/error.txt', 'r',encoding='utf-8') as fp:
+    for line in fp.readlines():
+        if line.find('Connect') > 0:
+            print(line[line.index('error:') + 6:line.index('---')])
+
+# aa = r"error:d:/demo\7_liutingfen_feiai_quan\20170124_bingqingjianjie1_qiluyiyuannanshanfenyuan\1img.jpg---cause:('Connection aborted.', OSError((-1, 'Unexpected EOF'),))"
+# print(aa.index('Connect'))
+# print(aa.find('Connect'))
+# print(aa[aa.index('error:') + 6:aa.index('---')])

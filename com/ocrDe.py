@@ -16,23 +16,25 @@ def get_file_content(filepath):
 # 初始化ApiOcr对象
 aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
-# 调用通用文字识别接口
-f = open('e:/demo/result.txt', 'a')
-for i in np.arange(1, 10):
-    result = aipOcr.basicGeneral(get_file_content('e:/66/cropImg' + str(i) + '.jpg'))
-    if result['words_result_num'] > 0:
-        for obj in result['words_result']:
-            print(obj['words'])
-            f.write(obj['words'])
-            f.write('\n')
-f.close()
+# # 调用通用文字识别接口
+# f = open('e:/demo/result.txt', 'a')
+# for i in np.arange(1, 10):
+#     result = aipOcr.basicGeneral(get_file_content('e:/66/cropImg' + str(i) + '.jpg'))
+#     if result['words_result_num'] > 0:
+#         for obj in result['words_result']:
+#             print(obj['words'])
+#             f.write(obj['words'])
+#             f.write('\n')
+# f.close()
 
 # 如果图片是url 调用示例如下
 # result = aipOcr.basicGeneral('http://img0.ph.126.net/JgZPujjerZ1A7U_6gfs8Ag==/2515260391903843500.jpg')
 # result = aipOcr.basicGeneral('https://img1.doubanio.com/lpic/s9155608.jpg')
 
-# result = aipOcr.basicGeneral(get_file_content('e:/5.jpg'))
-# # result = aipOcr.basicGeneral(get_file_content('e:/test/cropImg' + str(1) + '.jpg'))
-# print(type(result))
+result = aipOcr.basicGeneral(
+    get_file_content(r'D:\6yue3haoyufangtang\1_lizixiang_linbaliu_quan\20170410_zhuyuanbinganshouye2_jilindaxuedieryiyuan\1img.jpg'))
+# result = aipOcr.basicGeneral(get_file_content('e:/test/cropImg' + str(1) + '.jpg'))
 # print(result)
-# # print(result['words_result'])
+# print(result['words_result'])
+for res in result['words_result']:
+    print(res['words'])

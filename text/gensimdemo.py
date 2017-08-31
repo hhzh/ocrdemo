@@ -27,13 +27,12 @@ import multiprocessing
 # # train word2vec on the two sentences
 # model = gensim.models.Word2Vec(sentences, min_count=1)
 
-# with open('d:/ba.txt', encoding='gbk', errors='ignore') as fp:
+# with open('d:/天龙八部.txt', errors='ignore', encoding='utf-8') as fp:
 #     lines = fp.readlines()
 #     for line in lines:
-#         line.replace('\t', '').replace('\n', '').replace(' ', '')
-#         seg_list = jieba.cut(line, cut_all=False)
-#         with open('d:/result.txt', 'a', encoding='gbk') as ff:
-#             ff.write(" ".join(seg_list))
+#         seg_list = jieba.cut(line)
+#         with open('d:/分词后的天龙八部.txt', 'a', encoding='utf-8') as ff:
+#             ff.write(' '.join(seg_list))
 
 # sentences =Word2Vec.Text(u"fenci_result.txt")  # 加载语料
 # model =word2vec.Word2Vec(sentences, size=200)  #训练skip-gram模型，默认window=5
@@ -61,8 +60,46 @@ import multiprocessing
 # w2v_model.save('d:/bb.model')
 
 # text_list = segment_novel('./data/gulong.txt','gulong_dict2.txt')
-out_model_file = 'd:/bb.model'
-# train_word2vec(text_list,out_model_file)
-model = Word2Vec.load(out_model_file)
-for e in model.most_similar(positive=[u'慕容复'], topn=30):
-    print(e[0], e[1])
+# out_model_file = 'd:/bb.model'
+# # train_word2vec(text_list,out_model_file)
+# model = Word2Vec.load(out_model_file)
+# # for e in model.most_similar(positive=[u'童姥'], topn=30):
+# #     print(e[0], e[1])
+# print(model.similarity(u'乔峰', u'李秋水'))
+
+# 加载语料
+sentences = word2vec.Text8Corpus('d:/分词后的天龙八部.txt')
+
+# 训练模型
+model = word2vec.Word2Vec(sentences)
+
+# # 选出最相似的10个词
+# for e in model.most_similar(positive=['乔峰'], topn=30):
+#     print(e[0], e[1])
+#
+# # 保存模型
+# model.save('d:/天龙八部.model')
+#
+# # 加载模型
+# model = word2vec.Word2Vec.load('d:/天龙八部.model')
+#
+# model.save_word2vec_format('d:/天龙八部.model.bin', binary=True)
+# model = word2vec.Word2Vec.load_word2vec_format('d:/天龙八部.model.bin', binary=True)
+#
+# 计算两个词的相似度
+print(model.similarity('乔峰', '慕容复'))
+
+# 计算两个集合的相似度
+list1 = ['乔峰', '慕容复']
+list2 = ['萧远山', '慕容博']
+print(model.n_similarity(list1, list2))
+
+# 选出集合中不同类的词语
+list3 = ['乔峰', '段誉', '虚竹', '丁春秋']
+print(model.doesnt_match(list3))
+
+# # 查看词的向量值
+# print(type(model['乔峰']))  # 输出 <class 'numpy.ndarray'>
+# print(len(model['乔峰']))  # 输出 100
+# print(model['乔峰'])  # 输出 一行100列的向量
+

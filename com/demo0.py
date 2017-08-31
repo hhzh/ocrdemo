@@ -51,7 +51,7 @@ def traverseRem(filepath):
             os.remove(fi_d)
 
 
-traverseRem('d:/6yue3haoyufangtang/19_zhoumengjie_shenmu')
+traverseRem('d:/demo')
 
 # def begin_ocr(imgpaths):
 #     print('线程开始：')

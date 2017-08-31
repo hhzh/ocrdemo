@@ -67,7 +67,7 @@ def begin_ocr(imgpaths):
 def create_thread(imgpaths):
     x = 0
     splitpaths = []
-    splitsize = int(len(imgpaths) / 10)
+    splitsize = int(len(imgpaths) / 5)
     while x < len(imgpaths):
         splitpaths.append(imgpaths[x:x + splitsize])
         x = x + splitsize
@@ -85,5 +85,5 @@ if __name__ == "__main__":
     # 初始化ApiOcr对象
     aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
-    traverse('d:/6yue3haoyufangtang')
+    traverse('d:/demo')
     create_thread(paths)

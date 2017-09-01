@@ -39,22 +39,27 @@ aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
 # result = aipOcr.basicGeneral(
 #     get_file_content(r'D:\demo\4_linxuewei_linbaliu\20140424_xuechanggui\2img.jpg'))
+# result = aipOcr.tableRecognitionAsync(get_file_content(r'D:\demo\4_linxuewei_linbaliu\20110505_xuechanggui\1img.jpg'))
 # # result = aipOcr.basicGeneral(get_file_content('e:/test/cropImg' + str(1) + '.jpg'))
-# # print(result)
-# # print(result['words_result'])
+# print(result)
+mm=aipOcr.getTableRecognitionResult('10073324_17299', {
+    'result_type': 'json',
+})
+print(mm)
+# print(result['words_result'])
 # for res in result['words_result']:
 #     print(res['words'])
 
-with open('d:/pic.txt', 'r') as fp:
-    for line in fp.readlines():
-        path1, name = os.path.split(line.strip())
-        # print(os.path.exists(os.path.join(path1, 'result.txt')))
-        if not os.path.exists(os.path.join(path1, 'result.txt')):
-            sleep(1)
-            with open(os.path.join(path1, 'result.txt'), 'a', encoding='utf-8') as ff:
-                result = aipOcr.basicGeneral(get_file_content(line.strip()))
-                if result.get('words_result_num', 0) > 0:
-                    for res in result['words_result']:
-                        print(res['words'])
-                        ff.write(res['words'])
-                        ff.write('\n')
+# with open('d:/pic.txt', 'r') as fp:
+#     for line in fp.readlines():
+#         path1, name = os.path.split(line.strip())
+#         # print(os.path.exists(os.path.join(path1, 'result.txt')))
+#         if not os.path.exists(os.path.join(path1, 'result.txt')):
+#             sleep(1)
+#             with open(os.path.join(path1, 'result.txt'), 'a', encoding='utf-8') as ff:
+#                 result = aipOcr.basicGeneral(get_file_content(line.strip()))
+#                 if result.get('words_result_num', 0) > 0:
+#                     for res in result['words_result']:
+#                         print(res['words'])
+#                         ff.write(res['words'])
+#                         ff.write('\n')

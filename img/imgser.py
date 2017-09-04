@@ -1,11 +1,11 @@
 import requests
 
 # files = {'file': ('imgData', open('d:/git.jpg', 'rb'), 'image/jpeg')}
-files = {'file': open('e:/5.jpg', 'rb')}
+files = {'file': open('e:/1.jpg', 'rb')}
 
 # response = requests.post('http://www.carecnn.com/upload', files=files)
 response = requests.post('http://127.0.0.1:5000/upload', files=files)
-
+print(type(response))
 print(response.status_code)
 print(response.text)
 

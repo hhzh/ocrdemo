@@ -33,9 +33,6 @@ def upload_file():
 
         response = requests.post('http://www.carecnn.com/upload', files=files)
         if response.status_code == 200:
-            print(type(response.text))
-            print(len(response.text))
-            # print(response.text)
             lines = response.text.splitlines()
             for line in lines:
                 if line.startswith('<h1>MD5'):
@@ -57,6 +54,7 @@ def upload_file():
                     cv_img(imgMD5)
                     begin_ocr(imgMD5)
 
+                    print('md5:' + imgMD5)
                     if not os.path.exists(os.path.join(os.path.abspath('./img/' + imgMD5), 'result.txt')):
                         return 'ocr error.'
                     else:
@@ -65,7 +63,11 @@ def upload_file():
                                   encoding='utf-8') as fp:
                             for line in fp.readlines():
                                 result = result + line
-                        return jsonify({'imgMD5': imgMD5, 'result': result})
+                        print('result:' + result)
+                        # return 'OK'
+                        # return jsonify({'result': result})
+                        return result
+                        # return jsonify({'imgMD5': imgMD5, 'result': result})
 
         return 'ocr error.'
 

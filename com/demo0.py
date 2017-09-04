@@ -95,12 +95,15 @@ from time import ctime, sleep
 #     print(cc)
 # print(aa[50:60])
 
-with open('d:/error.txt', 'r',encoding='utf-8') as fp:
-    for line in fp.readlines():
-        if line.find('Connect') > 0:
-            print(line[line.index('error:') + 6:line.index('---')])
+# with open('d:/error.txt', 'r',encoding='utf-8') as fp:
+#     for line in fp.readlines():
+#         if line.find('Connect') > 0:
+#             print(line[line.index('error:') + 6:line.index('---')])
 
 # aa = r"error:d:/demo\7_liutingfen_feiai_quan\20170124_bingqingjianjie1_qiluyiyuannanshanfenyuan\1img.jpg---cause:('Connection aborted.', OSError((-1, 'Unexpected EOF'),))"
 # print(aa.index('Connect'))
 # print(aa.find('Connect'))
 # print(aa[aa.index('error:') + 6:aa.index('---')])
+
+img=cv2.imread('e:/da.png')
+print(img.shape)

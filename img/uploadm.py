@@ -23,7 +23,7 @@ def hello():
 def upload_MD5():
     if request.method == 'POST':
         imgMD5 = request.form['md5']
-        response = requests.get('http://www.carecnn.com/'+imgMD5)
+        response = requests.get('http://www.carecnn.com/' + imgMD5)
         if response.status_code == 200:
             if not os.path.exists(os.path.join(os.path.abspath('./img'), imgMD5)):
                 os.makedirs(os.path.join(os.path.abspath('./img'), imgMD5))
@@ -63,7 +63,7 @@ def upload_file():
                     # os.remove('./img/img.jpg')
                     print('上传图片 %s 成功！' % imgMD5.strip())
 
-                    with open('./img/info.log', 'a') as fp:
+                    with open('./img/info.log', 'a', encoding='utf-8') as fp:
                         fp.write('上传图片 %s 成功！' % imgMD5)
                         fp.write('\n')
 

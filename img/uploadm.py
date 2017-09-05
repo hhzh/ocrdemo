@@ -19,6 +19,22 @@ def hello():
     return jsonify(data)
 
 
+@app.route('/uploadMD5', methods=['POST'])
+def upload_MD5():
+    if request.method == 'POST':
+        imgMD5 = request.form['md5']
+        response = requests.get('http://www.carecnn.com/'+imgMD5)
+        if response.status_code == 200:
+            if not os.path.exists(os.path.join(os.path.abspath('./img'), imgMD5)):
+                os.makedirs(os.path.join(os.path.abspath('./img'), imgMD5))
+                with open('./img/info.log', 'a', encoding='utf-8') as fp:
+                    fp.write('创建目录:' + os.path.join(os.path.abspath('./img'), imgMD5))
+                    fp.write('\n')
+            with open('./img/' + imgMD5 + '/upload.jpg', 'wb') as fp:
+                fp.write(response.content)
+            return end_process(imgMD5)
+
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
@@ -51,23 +67,7 @@ def upload_file():
                         fp.write('上传图片 %s 成功！' % imgMD5)
                         fp.write('\n')
 
-                    cv_img(imgMD5)
-                    begin_ocr(imgMD5)
-
-                    print('md5:' + imgMD5)
-                    if not os.path.exists(os.path.join(os.path.abspath('./img/' + imgMD5), 'result.txt')):
-                        return 'ocr error.'
-                    else:
-                        result = ''
-                        with open(os.path.join(os.path.abspath('./img/' + imgMD5), 'result.txt'), 'r',
-                                  encoding='utf-8') as fp:
-                            for line in fp.readlines():
-                                result = result + line
-                        print('result:' + result)
-                        # return 'OK'
-                        # return jsonify({'result': result})
-                        return result
-                        # return jsonify({'imgMD5': imgMD5, 'result': result})
+                    return end_process(imgMD5)
 
         return 'ocr error.'
 
@@ -175,6 +175,26 @@ def begin_ocr(imgMD5):
                 fp.write('error:' + imgpath + ' ---cause:' + str(e))
                 fp.write('\n')
             print('error:' + imgpath + '---cause:' + str(e))
+
+
+def end_process(imgMD5):
+    cv_img(imgMD5)
+    begin_ocr(imgMD5)
+
+    print('md5:' + imgMD5)
+    if not os.path.exists(os.path.join(os.path.abspath('./img/' + imgMD5), 'result.txt')):
+        return 'ocr error.'
+    else:
+        result = ''
+        with open(os.path.join(os.path.abspath('./img/' + imgMD5), 'result.txt'), 'r',
+                  encoding='utf-8') as fp:
+            for line in fp.readlines():
+                result = result + line
+        print('result:' + result)
+        # return 'OK'
+        # return jsonify({'result': result})
+        # return result
+        return jsonify({'imgMD5': imgMD5, 'result': result})
 
 
 if __name__ == '__main__':

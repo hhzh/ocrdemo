@@ -37,18 +37,18 @@ aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 # 如果图片是url 调用示例如下
 # result = aipOcr.basicGeneral('http://img0.ph.126.net/JgZPujjerZ1A7U_6gfs8Ag==/2515260391903843500.jpg')
 
-# result = aipOcr.basicGeneral(
-#     get_file_content(r'D:\demo\4_linxuewei_linbaliu\20140424_xuechanggui\2img.jpg'))
+result = aipOcr.basicGeneral(
+    get_file_content(r'e:/66/dst1.jpg'))
 # result = aipOcr.tableRecognitionAsync(get_file_content(r'D:\demo\4_linxuewei_linbaliu\20110505_xuechanggui\1img.jpg'))
-# # result = aipOcr.basicGeneral(get_file_content('e:/test/cropImg' + str(1) + '.jpg'))
-# print(result)
-mm=aipOcr.getTableRecognitionResult('10073324_17299', {
-    'result_type': 'json',
-})
-print(mm)
+# result = aipOcr.basicGeneral(get_file_content('e:/test/cropImg' + str(1) + '.jpg'))
+print(result)
+# mm=aipOcr.getTableRecognitionResult('10073324_17299', {
+#     'result_type': 'json',
+# })
+# print(mm)
 # print(result['words_result'])
-# for res in result['words_result']:
-#     print(res['words'])
+for res in result['words_result']:
+    print(res['words'])
 
 # with open('d:/pic.txt', 'r') as fp:
 #     for line in fp.readlines():

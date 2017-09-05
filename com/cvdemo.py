@@ -329,14 +329,20 @@ for cc in c:
     height = y2 - y1
     width = x2 - x1
 
-    pts1 = np.float32([[x1, y1], [x2, y1], [x1, y2], [x2, y2]])
+    pts1 = np.float32(
+        [[box[2][0] - 20, box[2][1] - 20], [box[3][0] + 20, box[3][1] - 20], [box[1][0] - 20, box[1][1] + 20],
+         [box[0][0] + 20, box[0][1] + 20]])
+    # pts1 = np.float32([box[2], box[3], box[1], box[0]])
+    # pts1 = np.float32([[x1, y1], [x2, y1], [x1, y2], [x2, y2]])
     pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
     M = cv2.getPerspectiveTransform(pts1, pts2)
-    print('----------')
+
+    print('---')
     print(pts1)
-    print('===')
+    print('==')
     print(pts2)
 
+    # h,status=cv2.findHomography(pts1,pts2)
     dst = cv2.warpPerspective(img, M, (width, height))
 
     cropImg = img[y1:y1 + height, x1:x1 + width]

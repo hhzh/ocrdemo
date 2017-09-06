@@ -38,10 +38,6 @@ def upload_MD5():
             if not os.path.exists(os.path.join(os.path.abspath('./img'), imgMD5)):
                 os.makedirs(os.path.join(os.path.abspath('./img'), imgMD5))
                 logging.info('创建目录：%s', os.path.join(os.path.abspath('./img'), imgMD5))
-                # with open('./img/info.log', 'a', encoding='utf-8') as fp:
-                #     fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 创建目录:' + os.path.join(
-                #         os.path.abspath('./img'), imgMD5))
-                #     fp.write('\n')
             with open('./img/' + imgMD5 + '/upload.jpg', 'wb') as fp:
                 fp.write(response.content)
             return end_process(imgMD5, userId, caseType)
@@ -54,17 +50,10 @@ def upload_file():
         userId = request.args['userId']
         caseType = request.args['caseType']
         logging.info('接受请求/upload, userId=%s, caseType=%s', userId, caseType)
-        # if os.path.exists(os.path.)
         imgData.save('./img/img.jpg')
         logging.info('保存图片：%s 在 %s', imgData.filename, os.path.join(os.path.abspath('./img'), 'img.jpg'))
-        # with open('./img/info.log', 'a', encoding='utf-8') as fp:
-        #     fp.write(datetime.datetime.now().strftime(
-        #         '%Y-%m-%d %H:%M:%S') + '-- 保存图片:' + imgData.filename + ' 在 ' + os.path.join(os.path.abspath('./img'),
-        #                                                                                     'img.jpg'))
-        #     fp.write('\n')
 
         files = {'file': open(os.path.join(os.path.abspath('./img'), 'img.jpg'), 'rb')}
-
         response = requests.post('http://www.carecnn.com/upload', files=files)
         if response.status_code == 200:
             lines = response.text.splitlines()
@@ -74,19 +63,9 @@ def upload_file():
                     if not os.path.exists(os.path.join(os.path.abspath('./img'), imgMD5)):
                         os.makedirs(os.path.join(os.path.abspath('./img'), imgMD5))
                         logging.info('创建目录:%s', os.path.join(os.path.abspath('./img'), imgMD5))
-                        # with open('./img/info.log', 'a', encoding='utf-8') as fp:
-                        #     fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 创建目录:' + os.path.join(
-                        #         os.path.abspath('./img'), imgMD5))
-                        #     fp.write('\n')
                     with open('./img/' + imgMD5 + '/upload.jpg', 'wb') as fp:
                         fp.write(open('./img/img.jpg', 'rb').read())
-                    # os.remove('./img/img.jpg')
-
                     logging.info('上传图片 %s 成功！', imgMD5)
-                    # with open('./img/info.log', 'a', encoding='utf-8') as fp:
-                    #     fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 上传图片 %s 成功！' % imgMD5)
-                    #     fp.write('\n')
-
                     return end_process(imgMD5, userId, caseType)
 
         return 'ocr error.'
@@ -94,7 +73,6 @@ def upload_file():
 
 def cv_img(imgMD5, caseType):
     afile = os.path.join(os.path.abspath('./img/' + imgMD5), 'upload.jpg')
-    # afile = './img/' + imgMD5 + '/upload.jpg'
     filepath, filename = os.path.split(afile)
 
     img = cv2.imread(os.path.join(filepath, filename))
@@ -150,9 +128,6 @@ def cv_img(imgMD5, caseType):
         cv2.imwrite(os.path.join(filepath, 'zresult.jpg'), img)
     except:
         logging.error('图片处理出错：%s', afile)
-        # with open(os.path.join(filepath, 'errorImg.log'), 'a') as fp:
-        #     fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- error:' + afile)
-        #     fp.write('\n')
 
 
 # 读取图片
@@ -184,9 +159,6 @@ def begin_ocr(imgMD5):
     for imgpath in paths:
         path1, name = os.path.split(imgpath)
         logging.info('开始处理:%s', imgpath)
-        # with open(os.path.join('./img/', 'info.log'), 'a', encoding='utf-8') as fp:
-        #     fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 开始处理:' + imgpath)
-        #     fp.write('\n')
 
         try:
             result = aipOcr.basicGeneral(get_file_content(imgpath))
@@ -197,17 +169,8 @@ def begin_ocr(imgMD5):
                         fp.write('\n')
             else:
                 logging.warning('图片 %s 未识别：%s', imgpath, str(result))
-                # with open(os.path.join(path1, 'errorOcr.log'), 'a', encoding='utf-8') as fp:
-                #     fp.write(datetime.datetime.now().strftime(
-                #         '%Y-%m-%d %H:%M:%S') + '-- error:' + imgpath + ' ---cause:' + str(result))
-                #     fp.write('\n')
         except Exception as e:
             logging.error('识别图片 %s 出错：%s', imgpath, str(e))
-            # with open(os.path.join(path1, 'errorOcr.log'), 'a', encoding='utf-8') as fp:
-            #     fp.write(
-            #         datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- error:' + imgpath + ' ---cause:' + str(
-            #             e))
-            #     fp.write('\n')
 
 
 def end_process(imgMD5, userId, caseType):

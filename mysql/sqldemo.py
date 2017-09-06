@@ -16,6 +16,7 @@ with open(r'E:\github\ocrdemo\img\img\8799389f35fe2f23f8f6e75499da1dd3\result.tx
 
 sql = 'insert into sc_ocr (result,imgMD5) values (%s,%s)'
 result = cursor.execute(sql, (resultTXT, '8799389f35fe2f23f8f6e75499da1dd3'))
+
 print(result)
 conn.commit()
 conn.close()

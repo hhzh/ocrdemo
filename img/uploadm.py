@@ -4,8 +4,7 @@ import cv2
 import numpy as np
 import requests
 import pymysql
-import datetime
-import types
+import logging
 from aip import AipOcr
 from flask import Flask, request, jsonify
 
@@ -14,33 +13,38 @@ app.config['JSON_AS_ASCII'] = False
 
 paths = []
 
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(filename)s %(levelname)s %(message)s',
+                    datefmt='%a, %d %b %Y %H:%M:%S',
+                    filename='nohup.log',
+                    filemode='w')
+
 
 @app.route('/hello', methods=['GET'])
 def hello():
-    result = ''
-    with open(os.path.join(os.path.abspath('./img/95083e7bca6b09fb4c02e7cd666ab506'), 'result.txt'), 'r',
-              encoding='utf-8') as fp:
-        for line in fp.readlines():
-            result = result + line
-    data = {'aa': 'aa', 'bb': result}
+    data = {'result': 'hello'}
     return jsonify(data)
 
 
 @app.route('/uploadMD5', methods=['POST'])
 def upload_MD5():
     if request.method == 'POST':
-        imgMD5 = request.form['md5']
+        imgMD5 = request.form['imgMD5']
+        userId = request.form['userId']
+        caseType = request.form['caseType']
+        logging.info('接受请求/uploadMD5, imgMD5:%s, userId:%s, caseType=%s', imgMD5, userId, caseType)
         response = requests.get('http://www.carecnn.com/' + imgMD5)
         if response.status_code == 200:
             if not os.path.exists(os.path.join(os.path.abspath('./img'), imgMD5)):
                 os.makedirs(os.path.join(os.path.abspath('./img'), imgMD5))
-                with open('./img/info.log', 'a', encoding='utf-8') as fp:
-                    fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 创建目录:' + os.path.join(
-                        os.path.abspath('./img'), imgMD5))
-                    fp.write('\n')
+                logging.info('创建目录：%s', os.path.join(os.path.abspath('./img'), imgMD5))
+                # with open('./img/info.log', 'a', encoding='utf-8') as fp:
+                #     fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 创建目录:' + os.path.join(
+                #         os.path.abspath('./img'), imgMD5))
+                #     fp.write('\n')
             with open('./img/' + imgMD5 + '/upload.jpg', 'wb') as fp:
                 fp.write(response.content)
-            return end_process(imgMD5)
+            return end_process(imgMD5, userId, caseType)
 
 
 @app.route('/upload', methods=['POST'])
@@ -49,13 +53,15 @@ def upload_file():
         imgData = request.files['file']
         userId = request.args['userId']
         caseType = request.args['caseType']
+        logging.info('接受请求/upload, userId=%s, caseType=%s', userId, caseType)
         # if os.path.exists(os.path.)
         imgData.save('./img/img.jpg')
-        with open('./img/info.log', 'a', encoding='utf-8') as fp:
-            fp.write(datetime.datetime.now().strftime(
-                '%Y-%m-%d %H:%M:%S') + '-- 保存图片:' + imgData.filename + ' 在 ' + os.path.join(os.path.abspath('./img'),
-                                                                                            'img.jpg'))
-            fp.write('\n')
+        logging.info('保存图片：%s 在 %s', imgData.filename, os.path.join(os.path.abspath('./img'), 'img.jpg'))
+        # with open('./img/info.log', 'a', encoding='utf-8') as fp:
+        #     fp.write(datetime.datetime.now().strftime(
+        #         '%Y-%m-%d %H:%M:%S') + '-- 保存图片:' + imgData.filename + ' 在 ' + os.path.join(os.path.abspath('./img'),
+        #                                                                                     'img.jpg'))
+        #     fp.write('\n')
 
         files = {'file': open(os.path.join(os.path.abspath('./img'), 'img.jpg'), 'rb')}
 
@@ -67,17 +73,19 @@ def upload_file():
                     imgMD5 = line[line.index('<h1>MD5:') + 8:line.index('</h1>')].strip()
                     if not os.path.exists(os.path.join(os.path.abspath('./img'), imgMD5)):
                         os.makedirs(os.path.join(os.path.abspath('./img'), imgMD5))
-                        with open('./img/info.log', 'a', encoding='utf-8') as fp:
-                            fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 创建目录:' + os.path.join(
-                                os.path.abspath('./img'), imgMD5))
-                            fp.write('\n')
+                        logging.info('创建目录:%s', os.path.join(os.path.abspath('./img'), imgMD5))
+                        # with open('./img/info.log', 'a', encoding='utf-8') as fp:
+                        #     fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 创建目录:' + os.path.join(
+                        #         os.path.abspath('./img'), imgMD5))
+                        #     fp.write('\n')
                     with open('./img/' + imgMD5 + '/upload.jpg', 'wb') as fp:
                         fp.write(open('./img/img.jpg', 'rb').read())
                     # os.remove('./img/img.jpg')
 
-                    with open('./img/info.log', 'a', encoding='utf-8') as fp:
-                        fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 上传图片 %s 成功！' % imgMD5)
-                        fp.write('\n')
+                    logging.info('上传图片 %s 成功！', imgMD5)
+                    # with open('./img/info.log', 'a', encoding='utf-8') as fp:
+                    #     fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 上传图片 %s 成功！' % imgMD5)
+                    #     fp.write('\n')
 
                     return end_process(imgMD5, userId, caseType)
 
@@ -141,9 +149,10 @@ def cv_img(imgMD5, caseType):
             mm = mm + 1
         cv2.imwrite(os.path.join(filepath, 'zresult.jpg'), img)
     except:
-        with open(os.path.join(filepath, 'errorImg.log'), 'a') as fp:
-            fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- error:' + afile)
-            fp.write('\n')
+        logging.error('图片处理出错：%s', afile)
+        # with open(os.path.join(filepath, 'errorImg.log'), 'a') as fp:
+        #     fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- error:' + afile)
+        #     fp.write('\n')
 
 
 # 读取图片
@@ -174,9 +183,10 @@ def begin_ocr(imgMD5):
 
     for imgpath in paths:
         path1, name = os.path.split(imgpath)
-        with open(os.path.join('./img/', 'info.log'), 'a', encoding='utf-8') as fp:
-            fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 开始处理:' + imgpath)
-            fp.write('\n')
+        logging.info('开始处理:%s', imgpath)
+        # with open(os.path.join('./img/', 'info.log'), 'a', encoding='utf-8') as fp:
+        #     fp.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- 开始处理:' + imgpath)
+        #     fp.write('\n')
 
         try:
             result = aipOcr.basicGeneral(get_file_content(imgpath))
@@ -186,16 +196,18 @@ def begin_ocr(imgMD5):
                         fp.write(obj['words'])
                         fp.write('\n')
             else:
-                with open(os.path.join(path1, 'errorOcr.log'), 'a', encoding='utf-8') as fp:
-                    fp.write(datetime.datetime.now().strftime(
-                        '%Y-%m-%d %H:%M:%S') + '-- error:' + imgpath + ' ---cause:' + str(result))
-                    fp.write('\n')
+                logging.warning('图片 %s 未识别：%s', imgpath, str(result))
+                # with open(os.path.join(path1, 'errorOcr.log'), 'a', encoding='utf-8') as fp:
+                #     fp.write(datetime.datetime.now().strftime(
+                #         '%Y-%m-%d %H:%M:%S') + '-- error:' + imgpath + ' ---cause:' + str(result))
+                #     fp.write('\n')
         except Exception as e:
-            with open(os.path.join(path1, 'errorOcr.log'), 'a', encoding='utf-8') as fp:
-                fp.write(
-                    datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- error:' + imgpath + ' ---cause:' + str(
-                        e))
-                fp.write('\n')
+            logging.error('识别图片 %s 出错：%s', imgpath, str(e))
+            # with open(os.path.join(path1, 'errorOcr.log'), 'a', encoding='utf-8') as fp:
+            #     fp.write(
+            #         datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '-- error:' + imgpath + ' ---cause:' + str(
+            #             e))
+            #     fp.write('\n')
 
 
 def end_process(imgMD5, userId, caseType):
@@ -213,12 +225,16 @@ def end_process(imgMD5, userId, caseType):
         conn = pymysql.connect(host='114.112.104.149', port=3306, user='root', passwd='SCMD_2017_scmd', db='scmd',
                                charset='utf8')
         cursor = conn.cursor()
-        if isinstance(userId, int):
-            sql = 'insert into sc_ocr (userId,imgMD5,result) values (%d,%s,%s)'
-            exec_result = cursor.execute(sql, (userId, imgMD5, result))
-        else:
-            sql = 'insert into sc_ocr (imgMD5,result) values (%s,%s)'
-            exec_result = cursor.execute(sql, (imgMD5, result))
+        logging.info('插入数据库：imgMd5=%s, userId=%s, caseType=%s', imgMD5, userId, caseType)
+        try:
+            if userId is not None and userId != '' and userId != ' ':
+                sql = 'insert into sc_ocr (userId,imgMD5,result) values (%s,%s,%s)'
+                exec_result = cursor.execute(sql, (userId, imgMD5, result))
+            else:
+                sql = 'insert into sc_ocr (imgMD5,result) values (%s,%s)'
+                exec_result = cursor.execute(sql, (imgMD5, result))
+        except Exception as e:
+            logging.error('插入数据库出错：imgMd5=%s, userId=%s, caseType=%s, %s', imgMD5, userId, caseType, e)
         conn.commit()
         conn.close()
         # return 'OK'
@@ -229,4 +245,5 @@ def end_process(imgMD5, userId, caseType):
 
 
 if __name__ == '__main__':
+    # app.run()
     app.run(host='114.112.104.150', port=5000)

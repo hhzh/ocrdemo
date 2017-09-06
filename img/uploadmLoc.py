@@ -43,7 +43,7 @@ def upload_MD5():
                 os.makedirs(os.path.join(os.path.abspath('./img'), imgMD5))
                 with open('./img/info.log', 'a', encoding='utf-8') as fp:
                     fp.write('创建目录:' + os.path.join(os.path.abspath('./img'), imgMD5))
-                    logging.info('创建目录：%s' % os.path.join(os.path.abspath('./img'), imgMD5))
+                    logging.info('创建目录：%s' , os.path.join(os.path.abspath('./img'), imgMD5))
                     fp.write('\n')
             with open('./img/' + imgMD5 + '/upload.jpg', 'wb') as fp:
                 fp.write(response.content)
@@ -56,7 +56,7 @@ def upload_file():
         imgData = request.files['file']
         imgData.save('./img/img.jpg')
         print('保存图片 %s 成功！' % imgData.filename)
-        logging.info('保存图片 %s 成功！' % imgData.filename)
+        logging.info('保存图片 %s 成功！' , imgData.filename)
         with open('./img/info.log', 'a', encoding='utf-8') as fp:
             fp.write('保存图片:' + imgData.filename + ' 在 ' + os.path.join(os.path.abspath('./img'), 'img.jpg'))
             fp.write('\n')
@@ -170,7 +170,7 @@ def begin_ocr(imgMD5):
     for imgpath in paths:
         path, name = os.path.split(imgpath)
         print('开始处理：' + imgpath)
-        logging.info('开始处理：%s' % imgpath)
+        logging.info('开始处理：%s' , imgpath)
         with open(os.path.join(path, 'info.log'), 'a', encoding='utf-8') as fp:
             fp.write('开始处理:' + imgpath)
             fp.write('\n')

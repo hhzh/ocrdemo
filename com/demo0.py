@@ -4,6 +4,8 @@ import ctypes
 import numpy as np
 import threading
 from time import ctime, sleep
+import datetime
+import pypinyin
 
 # filepath = 'E:/bak/dd.txt'
 # filepath = filepath.replace('E:', 'D:')
@@ -105,5 +107,41 @@ from time import ctime, sleep
 # print(aa.find('Connect'))
 # print(aa[aa.index('error:') + 6:aa.index('---')])
 
-img=cv2.imread('e:/da.png')
-print(img.shape)
+# img=cv2.imread('e:/da.png')
+# print(img.shape)
+
+# now = datetime.datetime.now()
+# print(type(now))
+# print(now)
+# print(type(now.strftime('%Y-%m-%d %H:%M:%S')))
+# print(now.strftime('%Y-%m-%d %H:%M:%S'))
+# filepath = '20170203-09jianyanbaogaodan（1）.jpg'
+# print(filepath)
+# filepath = filepath.replace('（', '(')
+# filepath = filepath.replace('）', ')')
+# fileen = pypinyin.slug(filepath, separator='')
+# print(fileen)
+# print('20170203-09jianyanbaogaodan(1).jpg')
+
+paths = []
+
+
+def traverse(filepath):
+    files = os.listdir(filepath)
+    for fi in files:
+        fi_d = os.path.join(filepath, fi)
+        if os.path.isdir(fi_d):
+            traverse(fi_d)
+        else:
+            paths.append(os.path.join(filepath, fi_d))
+
+
+traverse('e:/55')
+
+for path in paths:
+    path1 = path.replace('（', '(')
+    path1 = path1.replace('）', ')')
+    print('----')
+    print(path)
+    print(path1)
+    os.rename(path, path1)

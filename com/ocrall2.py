@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import os
-import pypinyin
+import datetime
 
 paths = []
 
@@ -16,17 +16,19 @@ def traverse(filepath):
             paths.append(os.path.join(filepath, fi_d))
 
 
-traverse('d:/demo')
+start = datetime.datetime.now()
+
+traverse('/home/huazhen/file/6yue3haoyufangtang')
 for afile in paths:
     filepath, filename = os.path.split(afile)
 
-    # print(afile)
-    # print(filepath)
-    # print(filename)
-    filepath = filepath.replace('\\', '/')
+    # filepath = filepath.replace('\\', '/')
+    print(filepath)
+    print(filename)
+    print(afile)
 
     xpath = os.path.join(filepath, os.path.splitext(filename)[0])
-    print(xpath)
+    # print(xpath)
     if not os.path.exists(xpath):
         os.makedirs(xpath)
 
@@ -72,7 +74,11 @@ for afile in paths:
             mm = mm + 1
         cv2.imwrite(os.path.join(xpath, 'zresult.jpg'), img)
     except:
-        with open(os.path.join(filepath, 'errorImg.log'), 'a') as fp:
-            fp.write('error:' + afile)
-            fp.write('\n')
+        # with open(os.path.join(filepath, 'errorImg.log'), 'a') as fp:
+        #     fp.write('error:' + afile)
+        #     fp.write('\n')
         print("error:" + afile)
+
+end = datetime.datetime.now()
+print('---')
+print(end - start)

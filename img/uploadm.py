@@ -30,8 +30,10 @@ def hello():
 def upload_MD5():
     if request.method == 'POST':
         imgMD5 = request.form['imgMD5']
-        userId = request.form['userId']
-        caseType = request.form['caseType']
+        userId = request.form.get('userId')
+        # userId = request.form['userId']
+        caseType = request.form.get('caseType')
+        # caseType = request.form['caseType']
         logging.info('接受请求/uploadMD5, imgMD5:%s, userId:%s, caseType=%s', imgMD5, userId, caseType)
         response = requests.get('http://www.carecnn.com/' + imgMD5)
         if response.status_code == 200:
@@ -47,8 +49,10 @@ def upload_MD5():
 def upload_file():
     if request.method == 'POST':
         imgData = request.files['file']
-        userId = request.args['userId']
-        caseType = request.args['caseType']
+        userId = request.args.get('userId')
+        # userId = request.args['userId']
+        caseType = request.args.get('caseType')
+        # caseType = request.args['caseType']
         logging.info('接受请求/upload, userId=%s, caseType=%s', userId, caseType)
         imgData.save('./img/img.jpg')
         logging.info('保存图片：%s 在 %s', imgData.filename, os.path.join(os.path.abspath('./img'), 'img.jpg'))

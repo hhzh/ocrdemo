@@ -1,6 +1,7 @@
 from aip import AipOcr
 import numpy as np
 import os
+import datetime
 
 # my
 # APP_ID = '9999224'
@@ -18,6 +19,8 @@ API_KEY = 'zapROApDpKIY2xGF4LXwUTj4'
 SECRET_KEY = 'Zx3S7lMIqaU3nl4b7X59A1FXGCQYdS8G'
 
 paths = []
+
+start = datetime.datetime.now()
 
 
 # 读取图片
@@ -40,7 +43,7 @@ def traverse(filepath):
 aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
 # 调用通用文字识别接口
-traverse('d:/6yue3haoyufangtang')
+traverse('/home/huazhen/file/6yue3haoyufangtang')
 for imgpath in paths:
     path, name = os.path.split(imgpath)
     print('开始处理：' + imgpath)
@@ -66,3 +69,6 @@ for imgpath in paths:
             fp.write('\n')
         print('error:' + imgpath + '---cause:' + str(e))
 
+end = datetime.datetime.now()
+print('----')
+print(end - start)

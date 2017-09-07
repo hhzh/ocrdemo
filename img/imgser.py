@@ -5,7 +5,7 @@ files = {'file': open('e:/66.jpg', 'rb')}
 
 # response = requests.post('http://www.carecnn.com/upload', files=files)
 # response = requests.post('http://114.112.104.150:5000/upload', files=files)
-response = requests.post('http://127.0.0.1:5000/upload?userId=&caseType=', files=files)
+response = requests.post('http://127.0.0.1:5000/upload?userId=', files=files)
 print(type(response))
 print(response.status_code)
 print(response.text)

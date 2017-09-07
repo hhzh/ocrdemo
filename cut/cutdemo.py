@@ -36,8 +36,12 @@ web = socket.socket()
 
 web.connect(ip_port)
 web.sendall(bytes(request_str, 'gbk'))
+# web.sendall(data)
 server_reply = web.recv(1024)
-print(type(server_reply))
+
+# response = ocrrequest_pb2.Response()
+# response.ParseFromString(server_reply)
+# print('---'+response)
 print(server_reply)
 print(str(server_reply, 'gbk'))
 print(server_reply.decode('gbk'))

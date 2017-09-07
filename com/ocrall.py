@@ -21,7 +21,7 @@ for afile in paths:
     if afile.endswith('.JPG') or afile.endswith('.jpg') or afile.endswith('.JPEG') or afile.endswith(
             '.PNG') or afile.endswith('.png'):
         filepath, filename = os.path.split(afile)
-        filepath = filepath.replace('E:', 'D:')
+        # filepath = filepath.replace('E:', 'D:')
         filepathEn = pypinyin.slug(filepath, separator='')
         if not os.path.exists(filepathEn):
             # print(filepathEn)

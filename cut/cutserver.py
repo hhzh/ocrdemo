@@ -1,4 +1,5 @@
 import socket
+import ocrrequest_pb2
 
 # 开启ip和端口
 ip_port = ('127.0.0.1', 10001)
@@ -18,6 +19,12 @@ while True:
     data = conn.recv(1024)
     # 打印接受数据 注：当浏览器访问的时候，接受的数据的浏览器的信息等。
     print(data)
+    print('---')
+    request = ocrrequest_pb2.Request()
+    request.ParseFromString(data)
+    print(request)
+    print('---')
+    print('Request_buf=' + str(request.Request_buf, 'gbk'))
     # 向对方发送数据
     conn.send(bytes('<h1>welcome nginx</h1>', 'utf8'))
     # 关闭链接

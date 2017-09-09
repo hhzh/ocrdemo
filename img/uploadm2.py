@@ -5,10 +5,6 @@ import numpy as np
 import requests
 import pymysql
 import logging
-import threading
-# import ocrrequest_pb2
-import socket
-import shutil
 from aip import AipOcr
 from flask import Flask, request, jsonify
 
@@ -118,11 +114,6 @@ def cv_img(imgMD5, caseType):
             height = y2 - y1
             width = x2 - x1
 
-            if x1 < 0:
-                x1 = 0
-            if y1 < 0:
-                y1 = 0
-
             cropImg = img[y1:y1 + height, x1:x1 + width]
 
             if isinstance(caseType, str) and caseType == 'reportCard':
@@ -138,7 +129,7 @@ def cv_img(imgMD5, caseType):
 
             cv2.drawContours(img, [box], -1, (0, 255, 0), 3)
             mm = mm + 1
-        cv2.imwrite(os.path.join(filepath, 'zresult.jpg'), img)
+            # cv2.imwrite(os.path.join(filepath, 'zresult.jpg'), img)
     except:
         logging.error('图片处理出错：%s', afile)
 
@@ -186,6 +177,11 @@ def begin_ocr(imgMD5):
             logging.error('识别图片 %s 出错：%s', imgpath, str(e))
 
 
+def del_file(imgMD5):
+    md5path = os.path.join(os.path.abspath('./img/' + imgMD5))
+    logging.info('将要删除目录：%s', md5path)
+
+
 def end_process(imgMD5, userId, caseType):
     cv_img(imgMD5, caseType)
     begin_ocr(imgMD5)
@@ -213,40 +209,11 @@ def end_process(imgMD5, userId, caseType):
             logging.error('插入数据库出错：imgMd5=%s, userId=%s, caseType=%s, %s', imgMD5, userId, caseType, e)
         conn.commit()
         conn.close()
-        del_file(imgMD5)
         # return 'OK'
         # return jsonify({'result': result})
         # return jsonify({'imgMD5': imgMD5})
         return result
         # return jsonify({'imgMD5': imgMD5, 'result': result})
-
-
-def del_file(imgMD5):
-    md5path = os.path.join(os.path.abspath('./img/' + imgMD5))
-    logging.info('删除目录：%s', md5path)
-    shutil.rmtree(md5path)
-
-
-# def invoke_cut(imgMD5, userId, result):
-#     requestobj = ocrrequest_pb2.Request()
-#     requestobj.Request_buf = result.encode('gbk')
-#     requestobj.UserId = 32
-
-#     requestobj.imgMD5 = '95083e7bca6b09fb4c02e7cd666ab506'.encode('gbk')
-#
-#     data = requestobj.SerializeToString()
-#     xhead = '\t' + 'QS55AACA'
-#     xlen = str(len(xhead) + len(data)).zfill(8)
-#     request_head = 'QSEpsL01QSBEAACA' + xlen + '\t'
-#     request_end = 'QS55AACA'
-#
-#     ip_port = ('114.112.104.150', 10001)
-#     web = socket.socket()
-#
-#     web.connect(ip_port)
-#     web.sendall(bytes(request_head, 'gbk') + data + bytes(request_end, 'gbk'))
-#     server_reply = web.recv(1024)
-#     web.close()
 
 
 if __name__ == '__main__':

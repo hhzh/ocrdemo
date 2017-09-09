@@ -4,10 +4,10 @@ import requests
 files = {'file': open('e:/66.jpg', 'rb')}
 
 # response = requests.post('http://www.carecnn.com/upload', files=files)
-# response = requests.post('http://114.112.104.150:5000/upload', files=files)
-response = requests.post('http://127.0.0.1:5000/upload?userId=', files=files)
-print(type(response))
-print(response.status_code)
+response = requests.post('http://114.112.104.150:5000/upload', files=files)
+# response = requests.post('http://127.0.0.1:5000/upload?userId=', files=files)
+# print(type(response))
+# print(response.status_code)
 print(response.text)
 
 # # response = requests.post('http://114.112.104.150:5000/uploadMD5', data={'md5': '8799389f35fe2f23f8f6e75499da1dd3'})

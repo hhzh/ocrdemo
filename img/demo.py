@@ -2,6 +2,7 @@ import cv2
 import os
 from time import ctime
 import datetime
+import shutil
 
 # # img=cv2.imread(r'E:\github\ocrdemo\img\img.jpg')
 # img=cv2.imread(r'd:/timg.jpg')
@@ -25,5 +26,7 @@ import datetime
 #         result = result + line
 # print(result)
 
-print(ctime())
-print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+# print(ctime())
+# print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
+shutil.rmtree('e:/55/sdo')

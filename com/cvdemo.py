@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 # from PIL import Image
 # print(numpy.arange(1,10))
 
-img = cv2.imread('e:/x.jpg')
+img = cv2.imread('e:/55/text_normal.png')
 # cv2.namedWindow("Image")
 # cv2.imshow('Image', image)
 # k = cv2.waitKey(0)
@@ -308,17 +308,18 @@ closed = cv2.dilate(closed, None, iterations=4)
 image, contours, hierarchy = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 c = sorted(contours, key=cv2.contourArea, reverse=True)
 
-cv2.imwrite('e:/66/gray.jpg', gray)
-cv2.imwrite('e:/66/edges.jpg', edges)
-cv2.imwrite('e:/66/blurred.jpg', blurred)
-cv2.imwrite('e:/66/thresh.jpg', thresh)
-cv2.imwrite('e:/66/closed.jpg', closed)
+cv2.imwrite('e:/55/gray.jpg', gray)
+cv2.imwrite('e:/55/edges.jpg', edges)
+cv2.imwrite('e:/55/blurred.jpg', blurred)
+cv2.imwrite('e:/55/thresh.jpg', thresh)
+cv2.imwrite('e:/55/closed.jpg', closed)
 
 mm = 1
 for cc in c:
     # compute the rotated bounding box of the largest contour
     rect = cv2.minAreaRect(cc)
     box = np.int0(cv2.boxPoints(rect))
+    print(box)
 
     Xs = [i[0] for i in box]
     Ys = [i[1] for i in box]
@@ -338,9 +339,10 @@ for cc in c:
     M = cv2.getPerspectiveTransform(pts1, pts2)
 
     print('---')
-    print(pts1)
+    print(height)
     print('==')
-    print(pts2)
+    print(width)
+    print(y1,x1)
 
     # h,status=cv2.findHomography(pts1,pts2)
     dst = cv2.warpPerspective(img, M, (width, height))
@@ -349,10 +351,10 @@ for cc in c:
     # draw a bounding box arounded the detected barcode and display the image
     cv2.drawContours(img, [box], -1, (0, 255, 0), 3)
 
-    cv2.imwrite('e:/66/cropImg' + str(mm) + '.jpg', cropImg)
-    cv2.imwrite('e:/66/dst' + str(mm) + '.jpg', dst)
+    cv2.imwrite('e:/55/cropImg' + str(mm) + '.jpg', cropImg)
+    cv2.imwrite('e:/55/dst' + str(mm) + '.jpg', dst)
     mm = mm + 1
-cv2.imwrite('e:/66/box.jpg', img)
+cv2.imwrite('e:/55/box.jpg', img)
 
 # rect = cv2.minAreaRect(c[0])
 # box = np.int0(cv2.boxPoints(rect))

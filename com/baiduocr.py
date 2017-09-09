@@ -9,14 +9,14 @@ import threading
 # SECRET_KEY = 'BzUyA3S0IoqAmTBd0jGtZ0ghiIzB7dLi'
 
 # # qiaojian
-# APP_ID = '9985116'
-# API_KEY = 'wsOs6Ye6iEKqkH1czgBFWhWS'
-# SECRET_KEY = 'H56jOxlyZmueLUHnsx7uZnGqXmhVHoZG'
+APP_ID = '9985116'
+API_KEY = 'wsOs6Ye6iEKqkH1czgBFWhWS'
+SECRET_KEY = 'H56jOxlyZmueLUHnsx7uZnGqXmhVHoZG'
 
 # vip
-APP_ID = '10073324'
-API_KEY = 'zapROApDpKIY2xGF4LXwUTj4'
-SECRET_KEY = 'Zx3S7lMIqaU3nl4b7X59A1FXGCQYdS8G'
+# APP_ID = '10073324'
+# API_KEY = 'zapROApDpKIY2xGF4LXwUTj4'
+# SECRET_KEY = 'Zx3S7lMIqaU3nl4b7X59A1FXGCQYdS8G'
 
 paths = []
 
@@ -41,9 +41,9 @@ def begin_ocr(imgpaths):
     for imgpath in imgpaths:
         path, name = os.path.split(imgpath)
         print('开始处理：' + imgpath)
-        with open(os.path.join(path, 'nohup.log'), 'a') as fp:
-            fp.write('开始处理:' + imgpath)
-            fp.write('\n')
+        # with open(os.path.join(path, 'nohup.log'), 'a') as fp:
+        #     fp.write('开始处理:' + imgpath)
+        #     fp.write('\n')
 
         try:
             result = aipOcr.basicGeneral(get_file_content(imgpath))
@@ -54,7 +54,7 @@ def begin_ocr(imgpaths):
                         fp.write('\n')
             else:
                 with open(os.path.join(path, 'errorOcr.log'), 'a') as fp:
-                    fp.write('error:' + imgpath + ' ---cause:' + str(result))
+                    fp.write('error:' + imgpath + ' +++cause:' + str(result))
                     fp.write('\n')
                 print('error:' + imgpath + '---cause:' + str(result))
         except Exception as e:

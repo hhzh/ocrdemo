@@ -43,18 +43,18 @@ import pypinyin
 # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 # 删除文件
-# def traverseRem(filepath):
-#     files = os.listdir(filepath)
-#     for fi in files:
-#         fi_d = os.path.join(filepath, fi)
-#         if os.path.isdir(fi_d):
-#             traverseRem(fi_d)
-#         elif fi_d.endswith('errorOcr.log') or fi_d.endswith('result.txt') or fi_d.endswith('nohup.log'):
-#             print('remove:' + fi_d)
-#             os.remove(fi_d)
-#
-#
-# traverseRem('d:/demo')
+def traverseRem(filepath):
+    files = os.listdir(filepath)
+    for fi in files:
+        fi_d = os.path.join(filepath, fi)
+        if os.path.isdir(fi_d):
+            traverseRem(fi_d)
+        elif fi_d.endswith('errorOcr.log') or fi_d.endswith('result.txt') or fi_d.endswith('nohup.log'):
+            print('remove:' + fi_d)
+            os.remove(fi_d)
+
+
+traverseRem('d:/demo')
 
 # def begin_ocr(imgpaths):
 #     print('线程开始：')
@@ -123,25 +123,34 @@ import pypinyin
 # print(fileen)
 # print('20170203-09jianyanbaogaodan(1).jpg')
 
-paths = []
+# cv2.imdecode()
+#
+# paths = []
+#
+#
+# def traverse(filepath):
+#     files = os.listdir(filepath)
+#     for fi in files:
+#         fi_d = os.path.join(filepath, fi)
+#         if os.path.isdir(fi_d):
+#             traverse(fi_d)
+#         else:
+#             paths.append(os.path.join(filepath, fi_d))
+#
+#
+# traverse('e:/55')
+#
+# for path in paths:
+#     path1 = path.replace('（', '(')
+#     path1 = path1.replace('）', ')')
+#     print('----')
+#     print(path)
+#     print(path1)
+#     os.rename(path, path1)
 
-
-def traverse(filepath):
-    files = os.listdir(filepath)
-    for fi in files:
-        fi_d = os.path.join(filepath, fi)
-        if os.path.isdir(fi_d):
-            traverse(fi_d)
-        else:
-            paths.append(os.path.join(filepath, fi_d))
-
-
-traverse('e:/55')
-
-for path in paths:
-    path1 = path.replace('（', '(')
-    path1 = path1.replace('）', ')')
-    print('----')
-    print(path)
-    print(path1)
-    os.rename(path, path1)
+# filesize = os.path.getsize('e:/55/box.jpg') / 1024/1024
+# xxx='{:.4f}'.format(filesize)
+# print(type(xxx))
+# print(xxx)
+# print(type(filesize))
+# print(filesize)

@@ -20,7 +20,7 @@ SECRET_KEY = 'Zx3S7lMIqaU3nl4b7X59A1FXGCQYdS8G'
 
 paths = []
 
-start = datetime.datetime.now()
+sss = datetime.datetime.now()
 
 
 # 读取图片
@@ -45,11 +45,13 @@ aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 # 调用通用文字识别接口
 traverse('/home/huazhen/file/6yue3haoyufangtang')
 for imgpath in paths:
+    start = datetime.datetime.now()
+
     path, name = os.path.split(imgpath)
     print('开始处理：' + imgpath)
-    with open(os.path.join(path, 'nohup.log'), 'a') as fp:
-        fp.write('开始处理:' + imgpath)
-        fp.write('\n')
+    # with open(os.path.join(path, 'nohup.log'), 'a') as fp:
+    #     fp.write('开始处理:' + imgpath)
+    #     fp.write('\n')
 
     try:
         result = aipOcr.basicGeneral(get_file_content(imgpath))
@@ -59,16 +61,32 @@ for imgpath in paths:
                     fp.write(obj['words'])
                     fp.write('\n')
         else:
-            with open(os.path.join(path, 'errorOcr.log'), 'a') as fp:
-                fp.write('error:' + imgpath + ' ---cause:' + str(result))
+            with open('errorOcr.log', 'a') as fp:
+                fp.write(imgpath + '---' + str(result))
                 fp.write('\n')
-            print('error:' + imgpath + '---cause:' + str(result))
+            print('error:' + imgpath + '---' + str(result))
     except Exception as e:
-        with open(os.path.join(path, 'errorOcr.log'), 'a') as fp:
-            fp.write('error:' + imgpath + ' ---cause:' + str(e))
+        with open('errorOcr.log', 'a') as fp:
+            fp.write(imgpath + '---' + str(e))
             fp.write('\n')
         print('error:' + imgpath + '---cause:' + str(e))
 
-end = datetime.datetime.now()
-print('----')
-print(end - start)
+    finally:
+        end = datetime.datetime.now()
+        with open('ocr.txt', 'a') as fp:
+            filesize = os.path.getsize(imgpath) / 1024 / 1024
+            xxx = '{:.4f}'.format(filesize)
+            fp.write(str(imgpath))
+            fp.write('\t')
+            fp.write(xxx)
+            fp.write('\t')
+            fp.write(str(end - start))
+            fp.write('\n')
+
+with open('ocr.txt', 'a') as fp:
+    eee = datetime.datetime.now()
+    fp.write('------')
+    fp.write(str(eee - sss))
+    fp.write('\n')
+    fp.write(str(len(paths)))
+    fp.write('\n')

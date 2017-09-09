@@ -16,16 +16,18 @@ def traverse(filepath):
             paths.append(os.path.join(filepath, fi_d))
 
 
-start = datetime.datetime.now()
-
+sss = datetime.datetime.now()
 traverse('/home/huazhen/file/6yue3haoyufangtang')
+print('len(paths)=' + str(len(paths)))
 for afile in paths:
+    start = datetime.datetime.now()
+
     filepath, filename = os.path.split(afile)
 
     # filepath = filepath.replace('\\', '/')
-    print(filepath)
-    print(filename)
-    print(afile)
+    # print(filepath)
+    # print(filename)
+    # print(afile)
 
     xpath = os.path.join(filepath, os.path.splitext(filename)[0])
     # print(xpath)
@@ -72,13 +74,29 @@ for afile in paths:
 
             cv2.drawContours(img, [box], -1, (0, 255, 0), 3)
             mm = mm + 1
-        cv2.imwrite(os.path.join(xpath, 'zresult.jpg'), img)
-    except:
-        # with open(os.path.join(filepath, 'errorImg.log'), 'a') as fp:
-        #     fp.write('error:' + afile)
-        #     fp.write('\n')
-        print("error:" + afile)
+            # cv2.imwrite(os.path.join(xpath, 'zresult.jpg'), img)
 
-end = datetime.datetime.now()
-print('---')
-print(end - start)
+    except Exception as e:
+        with open('errorImg.log', 'a') as fp:
+            fp.write(afile + '---' + str(e))
+            fp.write('\n')
+        print("error:" + afile)
+    finally:
+        end = datetime.datetime.now()
+        with open('handle.txt', 'a') as fp:
+            filesize = os.path.getsize(afile) / 1024 / 1024
+            xxx = '{:.4f}'.format(filesize)
+            fp.write(afile)
+            fp.write('\t')
+            fp.write(xxx)
+            fp.write('\t')
+            fp.write(str(end - start))
+            fp.write('\n')
+eee = datetime.datetime.now()
+print(eee - sss)
+with open('handle.txt', 'a') as fp:
+    fp.write('------')
+    fp.write(str(eee - sss))
+    fp.write('\n')
+    fp.write(str(len(paths)))
+    fp.write('\n')

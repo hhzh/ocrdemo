@@ -11,16 +11,21 @@ request.imgMD5 = '95083e7bca6b09fb4c02e7cd666ab506'.encode('gbk')
 
 data = request.SerializeToString()
 xhead = '\t' + 'QS55AACA'
-xlen = str(len(xhead) + len(str(data))).zfill(8)
+xlen = str(len(xhead) + len(data)).zfill(8)
+print('xlen = ' + xlen)
 # xlen = str(140).zfill(8)
-request_str = 'QSEpsL01QSBEAACA' + xlen + '\t' + str(data) + 'QS55AACA'
+request_head = 'QSEpsL01QSBEAACA' + xlen + '\t'
+request_end = 'QS55AACA'
+# request_str = 'QSEpsL01QSBEAACA' + xlen + '\t' + str(data) + 'QS55AACA'
+
+# print(data)
 
 # print(type(data))
 # print(type(request_str))
 # print('---')
 # print(type(xlen))
 # print(xlen)
-print(request_str)
+# print(request_str)
 # print(bytes(request_str, 'gbk'))
 
 # print(len(data))
@@ -35,7 +40,8 @@ ip_port = ('114.112.104.150', 10001)
 web = socket.socket()
 
 web.connect(ip_port)
-web.sendall(bytes(request_str, 'gbk'))
+web.sendall(bytes(request_head, 'gbk') + data + bytes(request_end, 'gbk'))
+# web.sendall(bytes(request_str, 'gbk'))
 # web.sendall(data)
 server_reply = web.recv(1024)
 

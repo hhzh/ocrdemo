@@ -102,4 +102,3 @@ print(model.doesnt_match(list3))
 # print(type(model['乔峰']))  # 输出 <class 'numpy.ndarray'>
 # print(len(model['乔峰']))  # 输出 100
 # print(model['乔峰'])  # 输出 一行100列的向量
-

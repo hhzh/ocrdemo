@@ -250,5 +250,5 @@ def del_file(imgMD5):
 
 
 if __name__ == '__main__':
-    # app.run()
-    app.run(host='114.112.104.150', port=5000)
+    app.run()
+    # app.run(host='114.112.104.150', port=5000)

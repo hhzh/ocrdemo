@@ -172,7 +172,9 @@ def begin_ocr(imgMD5):
 
     paths.sort()
 
-    for imgpath in paths:
+    paths1 = set(paths)
+
+    for imgpath in paths1:
         path1, name = os.path.split(imgpath)
         logging.info('开始处理:%s', imgpath)
 

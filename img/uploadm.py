@@ -101,7 +101,8 @@ def cv_img(imgMD5, caseType):
         closed = cv2.dilate(closed, None, iterations=4)
 
         image, contours, hierarchy = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        c = sorted(contours, key=cv2.contourArea, reverse=True)
+        # c = sorted(contours, key=cv2.contourArea, reverse=True)
+        c = sorted(contours, key=lambda con: min(con[:, 0, 1]))
 
         mm = 1
         for cc in c:
@@ -168,6 +169,8 @@ def begin_ocr(imgMD5):
     aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
     traverse(os.path.join(os.path.abspath('./img'), imgMD5))
+
+    paths.sort()
 
     for imgpath in paths:
         path1, name = os.path.split(imgpath)
@@ -250,5 +253,5 @@ def del_file(imgMD5):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(host='114.112.104.150', port=5000)
+    # app.run()
+    app.run(host='114.112.104.150', port=5000)

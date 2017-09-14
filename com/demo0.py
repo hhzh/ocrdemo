@@ -42,19 +42,19 @@ import pypinyin
 # print(img.shape)
 # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-# 删除文件
-def traverseRem(filepath):
-    files = os.listdir(filepath)
-    for fi in files:
-        fi_d = os.path.join(filepath, fi)
-        if os.path.isdir(fi_d):
-            traverseRem(fi_d)
-        elif fi_d.endswith('errorOcr.log') or fi_d.endswith('result.txt') or fi_d.endswith('nohup.log'):
-            print('remove:' + fi_d)
-            os.remove(fi_d)
-
-
-traverseRem('d:/demo')
+# # 删除文件
+# def traverseRem(filepath):
+#     files = os.listdir(filepath)
+#     for fi in files:
+#         fi_d = os.path.join(filepath, fi)
+#         if os.path.isdir(fi_d):
+#             traverseRem(fi_d)
+#         elif fi_d.endswith('errorOcr.log') or fi_d.endswith('result.txt') or fi_d.endswith('nohup.log'):
+#             print('remove:' + fi_d)
+#             os.remove(fi_d)
+#
+#
+# traverseRem('d:/demo')
 
 # def begin_ocr(imgpaths):
 #     print('线程开始：')
@@ -154,3 +154,8 @@ traverseRem('d:/demo')
 # print(xxx)
 # print(type(filesize))
 # print(filesize)
+
+xx = np.array([[[671, 3921]], [[671, 3937]], [[670, 3938]]])
+print(type(xx))
+print(xx.shape)
+print(xx[0][0][0])

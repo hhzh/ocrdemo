@@ -17,8 +17,8 @@ def traverse(filepath):
 
 
 sss = datetime.datetime.now()
-traverse('/home/huazhen/file/6yue3haoyufangtang')
-print('len(paths)=' + str(len(paths)))
+traverse('e:/demo')
+# print('len(paths)=' + str(len(paths)))
 for afile in paths:
     start = datetime.datetime.now()
 
@@ -52,7 +52,9 @@ for afile in paths:
         closed = cv2.dilate(closed, None, iterations=4)
 
         image, contours, hierarchy = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        c = sorted(contours, key=cv2.contourArea, reverse=True)
+        c = sorted(contours, key=lambda con: min(con[:, 0, 1]))
+        # c = sorted(contours, key=cv2.contourArea, reverse=True)
+        # contours.sort()
 
         mm = 1
         for cc in c:
@@ -74,13 +76,13 @@ for afile in paths:
 
             cv2.drawContours(img, [box], -1, (0, 255, 0), 3)
             mm = mm + 1
-            # cv2.imwrite(os.path.join(xpath, 'zresult.jpg'), img)
+        cv2.imwrite(os.path.join(xpath, 'zresult.jpg'), img)
 
     except Exception as e:
         with open('errorImg.log', 'a') as fp:
             fp.write(afile + '---' + str(e))
             fp.write('\n')
-        print("error:" + afile)
+        print("error:" + afile + '--' + str(e))
     finally:
         end = datetime.datetime.now()
         with open('handle.txt', 'a') as fp:
@@ -93,7 +95,7 @@ for afile in paths:
             fp.write(str(end - start))
             fp.write('\n')
 eee = datetime.datetime.now()
-print(eee - sss)
+# print(eee - sss)
 with open('handle.txt', 'a') as fp:
     fp.write('------')
     fp.write(str(eee - sss))

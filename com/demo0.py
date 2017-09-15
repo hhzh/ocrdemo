@@ -155,7 +155,13 @@ import pypinyin
 # print(type(filesize))
 # print(filesize)
 
-xx = np.array([[[671, 3921]], [[671, 3937]], [[670, 3938]]])
-print(type(xx))
-print(xx.shape)
-print(xx[0][0][0])
+# xx = np.array([[[671, 3921]], [[671, 3937]], [[670, 3938]]])
+# print(type(xx))
+# print(xx.shape)
+# print(xx[0][0][0])
+
+l1 = [3, 5, 2, 9, 1, 3]
+s1 = set(l1)
+print(s1)
+l2=list(s1)
+print(l2)

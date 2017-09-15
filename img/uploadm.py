@@ -170,11 +170,15 @@ def begin_ocr(imgMD5):
 
     traverse(os.path.join(os.path.abspath('./img'), imgMD5))
 
-    paths.sort()
-
     paths1 = set(paths)
 
-    for imgpath in paths1:
+    paths2 = list(paths1)
+
+    paths2.sort()
+
+    logging.info('paths2 is: %s', paths2)
+
+    for imgpath in paths2:
         path1, name = os.path.split(imgpath)
         logging.info('开始处理:%s', imgpath)
 

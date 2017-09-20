@@ -43,7 +43,7 @@ def traverse(filepath):
 aipOcr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
 # 调用通用文字识别接口
-traverse('/home/huazhen/file/6yue3haoyufangtang')
+traverse('/demo/im')
 for imgpath in paths:
     start = datetime.datetime.now()
 

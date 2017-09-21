@@ -233,7 +233,7 @@ def end_process(imgMD5, userId, caseType):
 def del_file(imgMD5):
     md5path = os.path.join(os.path.abspath('./img/' + imgMD5))
     logging.info('删除目录：%s', md5path)
-    # shutil.rmtree(md5path)
+    shutil.rmtree(md5path)
 
 
 # def invoke_cut(imgMD5, userId, result):
@@ -259,5 +259,5 @@ def del_file(imgMD5):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(host='114.112.104.150', port=5000)
+    # app.run()
+    app.run(host='114.112.104.150', port=5000)

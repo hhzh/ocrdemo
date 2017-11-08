@@ -6,7 +6,7 @@ conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='SCMD_20
                        charset='utf8')
 cursor = conn.cursor()
 
-num = 9960
+num = 9979
 # while num < 9960:
 data = {'sort': 'T', 'range': '0,10', 'start': num}
 response = requests.post('https://movie.douban.com/j/new_search_subjects', data=data)
@@ -20,8 +20,8 @@ for data_obj in data_result:
     rate = float(data_obj['rate'])
     star = int(data_obj['star'])
     url = data_obj['url']
-    casts = ','.join(data_obj['casts'])
-    directors = ','.join(data_obj['directors'])
+    casts = '/'.join(data_obj['casts'])
+    directors = '/'.join(data_obj['directors'])
     cover = data_obj['cover']
     cover_x = data_obj['cover_x']
     cover_y = data_obj['cover_y']
@@ -30,7 +30,7 @@ for data_obj in data_result:
         sql = 'insert into film (id,title,rate,star,url,casts,directors,cover,cover_x,cover_y) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
         exec_result = cursor.execute(sql, (id, title, rate, star, url, casts, directors, cover, cover_x, cover_y))
         conn.commit()
-        # print(num, exec_result, id)
+        print(num, exec_result, id)
     except Exception as e:
         print(e)
 

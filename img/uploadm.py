@@ -207,7 +207,7 @@ def end_process(imgMD5, userId, caseType):
                   encoding='utf-8') as fp:
             for line in fp.readlines():
                 result = result + line
-        conn = pymysql.connect(host='114.112.104.149', port=3306, user='root', passwd='SCMD_2017_scmd', db='scmd',
+        conn = pymysql.connect(host='114.112.104.66', port=3306, user='root', passwd='', db='scmd',
                                charset='utf8')
         cursor = conn.cursor()
         logging.info('插入数据库：imgMd5=%s, userId=%s, caseType=%s', imgMD5, userId, caseType)

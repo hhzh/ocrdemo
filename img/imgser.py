@@ -1,9 +1,10 @@
 import requests
 
 # files = {'file': ('imgData', open('d:/git.jpg', 'rb'), 'image/jpeg')}
-files = {'file': open('e:/crop/im.jpg', 'rb')}
+files = {'file': open('d:/ba.jpg', 'rb')}
 
-response = requests.post('http://www.carecnn.com/upload', files=files)
+# response = requests.post('http://www.carecnn.com/upload', files=files)
+response = requests.post('http://114.112.104.117/upload', files=files)
 # response = requests.post('http://114.112.104.150:5000/upload', files=files)
 # response = requests.post('http://127.0.0.1:5000/upload?userId=', files=files)
 print(type(response))
